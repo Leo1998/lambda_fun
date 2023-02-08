@@ -82,7 +82,7 @@ class TermApp(Term):
             steps += 1
             if r.is_redex():
                 var = r.t1.var
-                r = r.t1.t.subst(var, self.t2)
+                r = r.t1.t.subst(var, r.t2)
             else:
                 r.t1 = r.t1.beta_multistep(max_iter=max_iter)
                 r.t2 = r.t2.beta_multistep(max_iter=max_iter)
