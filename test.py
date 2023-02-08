@@ -6,11 +6,12 @@ from parsing import parse_term
 def test(input):
     term = parse_term(input)
     fv = term.fv()
+    normalform = term.beta_reduce()
     #print(f"Input: {input}")
     print(f"Term: {term}")
     print("Free vars: " + (str(fv) if len(fv) != 0 else "{}"))
     print(f"Is Normalform: {term.is_nf()}")
-    print(f"Normalform: {term.beta_multistep()}")
+    print(f"Normalform: {normalform} {'    (term is probably not normalizing)' if not normalform.is_nf() else ''}")
     print("")
 
 test("x") #var

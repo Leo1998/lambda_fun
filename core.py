@@ -15,7 +15,7 @@ class Term:
     def is_redex(self):
         return isinstance(self, TermApp) and isinstance(self.t1, TermAbs)
 
-    def beta_multistep(self, max_iter=100):
+    def beta_reduce(self, max_iter=100):
         pass
 
 class TermVar(Term):
@@ -41,7 +41,7 @@ class TermVar(Term):
     def is_nf(self):
         return True
     
-    def beta_multistep(self, max_iter=100):
+    def beta_reduce(self, max_iter=100):
         return self.copy()
 
 class TermApp(Term):
@@ -75,7 +75,7 @@ class TermApp(Term):
         else:
             return self.t1.is_nf() and self.t2.is_nf()
 
-    def beta_multistep(self, max_iter=100):
+    def beta_reduce(self, max_iter=100):
         r = self.copy()
         steps = 0
         while steps <= max_iter and not r.is_nf():
@@ -84,8 +84,8 @@ class TermApp(Term):
                 var = r.t1.var
                 r = r.t1.t.subst(var, r.t2)
             else:
-                r.t1 = r.t1.beta_multistep(max_iter=max_iter)
-                r.t2 = r.t2.beta_multistep(max_iter=max_iter)
+                r.t1 = r.t1.beta_reduce(max_iter=max_iter)
+                r.t2 = r.t2.beta_reduce(max_iter=max_iter)
         return r
 
 
@@ -123,7 +123,7 @@ class TermAbs(Term):
     def is_nf(self):
         return self.t.is_nf()
 
-    def beta_multistep(self, max_iter=100):
+    def beta_reduce(self, max_iter=100):
         r = self.copy()
-        r.t = r.t.beta_multistep(max_iter=max_iter)
+        r.t = r.t.beta_reduce(max_iter=max_iter)
         return r
