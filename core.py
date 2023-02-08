@@ -106,14 +106,14 @@ class TermAbs(Term):
         if self.var == var:
             return self.copy()
         else:
-            if self.var not in term.fv() or var not in self.t.fv():
+            if self.var == var:
+                return self.copy()
+            elif self.var not in term.fv():
                 s = self.t.subst(var, term)
                 r = TermAbs()
                 r.var = self.var
                 r.t = s
                 return r
-            if self.var in term.fv() and var in self.t.fv():
-                raise ValueError("Help!!! not implemented")
     
     def fv(self):
         vars = self.t.fv()
